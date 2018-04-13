@@ -1,0 +1,39 @@
+#!/bin/sh
+
+Red='\033[0;31m'
+Green='\033[0;32m'
+Yellow='\033[0;33m'
+None='\033[0m'
+
+colouredText(){
+    Text=$1
+    Colour=$2
+	echo $2$1$None
+}
+
+
+tempDiffFile="/c/File/TempDiff.png"
+tempMontFile="/c/File/TempMont.png"
+
+montageFlags="-background black -geometry $((2 * $(tput cols)))>"
+montageDestFlags="-compose src $tempMontFile"
+
+if [ ! -s $1 ]; then
+	echo -e $(colouredText "+ $2" $Green)
+	montage $montageFlags $2 $montageDestFlags
+fi
+
+if [ ! -s $2 ]; then
+	echo -e $(colouredText "- $1" $Red)
+	montage $montageFlags $1 $montageDestFlags
+fi
+
+if [ -s $1 ] && [ -s $2 ]; then
+	echo -e $(colouredText "- $1" $Red)
+	echo -e $(colouredText "+ $2" $Green)
+	compare $2 $1 -compose src $tempDiffFile
+	montage $montageFlags $2 $tempDiffFile $1 $montageDestFlags
+fi
+
+convert $tempMontFile sixel:-
+rm -rf $tempDiffFile $tempMontFile
