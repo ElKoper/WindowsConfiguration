@@ -10,19 +10,7 @@ alias gitco="git commit"
 alias gitcaa="git commit -a --amend"
 alias gitwh="git whatchanged"
 alias gitf="git fetch --prune"
-
-alias gti="git"
-alias gtic="gitc"
-alias gtib="gitb"
-alias gtir="gitr"
-alias gtiri="gitri"
-alias gtid="gitd"
-alias gtids="gitds"
-alias gtis="gits"
-alias gtico="gitco"
-alias gticaa="gitcaa"
-alias gtiwh="gitwh"
-alias gtif="gitf"
+alias gitgc="git gc --agressive --prune=now"
 
 gitimgd(){
 	if (( $# < 3 )) ; then
@@ -34,6 +22,13 @@ gitimgd(){
 alias gtiimgd="gitimgd"
 #alias gitk="git log --oneline --graph --decorate"
 
+git_old_remote(){
+	if (( $# != 1 )) ; then
+		echo "Exactly one argument is expected. (Part of autor name)"
+	else
+		for branch in `git branch -r | grep -v HEAD`;do echo -e `git show --format="%ai  %ar  by %an" $branch | head -n 1` \\t$branch; done | sort -r | grep -i $1
+	fi
+}
 
 # enable tab completion in git aliases
 __git_complete gitc _git_checkout
@@ -45,19 +40,9 @@ __git_complete gitds _git_diff
 __git_complete gitco _git_commit
 __git_complete gitcaa _git_commit
 __git_complete gitwh _git_whatchanged
-
-__git_complete gtic _git_checkout
-__git_complete gtib _git_branch
-__git_complete gtir _git_rebase
-__git_complete gtiri _git_rebase
-__git_complete gtid _git_diff
-__git_complete gtids _git_diff
-__git_complete gtico _git_commit
-__git_complete gticaa _git_commit
-__git_complete gtiwh _git_whatchanged
+__git_complete gitf _git_fetch
 
 __git_complete gitimgd _git_diff
-__git_complete gtiimgd _git_diff
 
 # enable bash prompt states
 export GIT_PS1_SHOWDIRTYSTATE=NON_EMPTY_VALUE 		# unstaged '*', staged '+'
