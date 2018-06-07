@@ -5,11 +5,11 @@ alias gitr="git rebase"
 alias gitri="git rebase -i"
 alias gitd="git diff"
 alias gitds="git diff --stat"
-alias gitpngd=""
-alias gits="git status"
+alias gits="git fetch && git status"
 alias gitco="git commit"
 alias gitcaa="git commit -a --amend"
 alias gitwh="git whatchanged"
+alias gitf="git fetch --prune"
 
 alias gti="git"
 alias gtic="gitc"
@@ -21,10 +21,15 @@ alias gtids="gitds"
 alias gtis="gits"
 alias gtico="gitco"
 alias gticaa="gitcaa"
-alias gtiwh="git whatchanged"
+alias gtiwh="gitwh"
+alias gtif="gitf"
 
 gitimgd(){
-	git difftool -x git-imgdiff -y $1 $2 -- *.png 
+	if (( $# < 3 )) ; then
+		git difftool -x git-imgdiff -y $1 $2 -- *.png
+	else
+		git difftool -x git-imgdiff -y $@
+	fi
 }
 alias gtiimgd="gitimgd"
 #alias gitk="git log --oneline --graph --decorate"

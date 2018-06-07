@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Working only with ImageMagick-7.0.7-28-Q16-x64-dll.exe installed
+
 Red='\033[0;31m'
 Green='\033[0;32m'
 Yellow='\033[0;33m'
