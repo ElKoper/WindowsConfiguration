@@ -10,7 +10,7 @@ alias gitco="git commit"
 alias gitcaa="git commit -a --amend"
 alias gitwh="git whatchanged"
 alias gitf="git fetch --prune"
-alias gitgc="git gc --agressive --prune=now"
+alias gitgc="git gc --aggressive --prune=now"
 
 gitimgd(){
 	if (( $# < 3 )) ; then
