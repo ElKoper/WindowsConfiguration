@@ -5,6 +5,8 @@ alias grep="grep --color"
 alias ls="ls --color=auto"
 
 # cd
+ATF_PATH='/c/ATF/'
+alias atf='cd $ATF_PATH'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
