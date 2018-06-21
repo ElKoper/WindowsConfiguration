@@ -1,12 +1,35 @@
-#function used in aliases
-git_current_branch(){
+#git functions
+__git_current_branch(){
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+
+gitpu(){
+	git push -u origin `__git_current_branch`
+}
+
+gitbr(){
+	for branch in `git branch -r | grep -v HEAD`; do
+		git log -1 --pretty="%ci %<(15)%cr %<(27)%an %D" $branch
+	done | sort -r | cut -c27-
+}
+
+gitb(){
+	for branch in $(git branch | sed s/\*//); do
+		git log -1 --pretty="%ci %<(15)%cr %<(27)%an %D" $branch
+	done | sort -r | cut -c27-
+}
+
+gitb_old(){
+	for branch in $(git branch | sed s/\*//); do
+		if [ -z "$(git log -1 --since='7 days ago' -s $branch)" ]; then
+			git log -1 --pretty="%ci %<(15)%cr %<(27)%an %D" $branch
+			#git branch -D $branch
+		fi
+	done | sort -r | cut -c27-
 }
 
 
 # git aliases
-alias gitb="git branch"
-alias gitbr="git branch -r"
 alias gitc="git checkout"
 alias gitcaa="git commit -a --amend"
 alias gitco="git commit"
@@ -15,15 +38,16 @@ alias gitd="git diff"
 alias gitds="git diff --stat"
 alias gitf="git fetch --prune"
 alias gitl='git log --pretty=format:"%h  %ad  %<(18)%an  %C(yellow)%s%C(green) %d " --date=short'
-alias gitpu="git push -u origin `git_current_branch`"
+alias gitmdev="git fetch develop:develop ; git merge develop"
 alias gitr="git rebase"
 alias gitri="git rebase -i"
-alias gits="gitf && git status"
+alias gits="gitf ; git status"
 alias gitss="git status"
 alias gitwh="git whatchanged"
 
 alias gitgc="git gc --aggressive --prune=now"
-alias gitwip="git commit -am 'Work in progress'"
+alias gitwip="git commit -am '.'"
+alias gitfix="git commit -am 'Resolve issues pointed in review'"
 gitimgd(){
 	if (( $# < 3 )) ; then
 		git difftool -x git-imgdiff -y $1 $2 -- *.png
@@ -34,8 +58,6 @@ gitimgd(){
 
 
 # enable tab completion in git aliases
-__git_complete gitb _git_branch
-__git_complete gitbr _git_branch
 __git_complete gitc _git_checkout
 __git_complete gitcaa _git_commit
 __git_complete gitco _git_commit
@@ -49,20 +71,6 @@ __git_complete gitwh _git_whatchanged
 
 __git_complete gitimgd _git_diff
 
-
-# Helper and rare usage functions
-gitbr_by_date(){
-	for branch in `git branch -r | grep -v HEAD`;do echo -e `git show --format="%ci %cr" $branch | head -n 1` \\t$branch; done | sort -r
-}
-
-gitb_old(){
-	for branch in $(git branch | sed /\*/d); do
-	  if [ -z "$(git log -1 --since='21 days ago' -s $branch)" ]; then
-		echo $branch
-		#git branch -D $branch
-	  fi
-	done
-}
 
 # enable bash prompt states
 export GIT_PS1_SHOWDIRTYSTATE=NON_EMPTY_VALUE 		# unstaged '*', staged '+'
