@@ -38,7 +38,7 @@ alias gitd="git diff"
 alias gitds="git diff --stat"
 alias gitf="git fetch --prune"
 alias gitl='git log --pretty=format:"%h  %ad  %<(18)%an  %C(yellow)%s%C(green) %d " --date=short'
-alias gitmdev="git fetch develop:develop ; git merge develop"
+alias gitmdev="git fetch origin develop:develop ; git merge develop"
 alias gitr="git rebase"
 alias gitri="git rebase -i"
 alias gits="gitf ; git status"
