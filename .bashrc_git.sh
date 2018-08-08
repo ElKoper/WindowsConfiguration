@@ -14,9 +14,13 @@ gitbr(){
 }
 
 gitb(){
-	for branch in $(git branch | sed s/\*//); do
-		git log -1 --pretty="%ci %<(15)%cr %<(27)%an %D" $branch
-	done | sort -r | cut -c27-
+	if (( $# > 0 )) ; then
+		git branch $@
+	else
+		for branch in $(git branch | sed s/\*//); do
+			git log -1 --pretty="%ci %<(15)%cr %<(27)%an %D" $branch
+		done | sort -r | cut -c27-
+	fi
 }
 
 gitb_old(){
@@ -58,6 +62,7 @@ gitimgd(){
 
 
 # enable tab completion in git aliases
+__git_complete gitb _git_branch
 __git_complete gitc _git_checkout
 __git_complete gitcaa _git_commit
 __git_complete gitco _git_commit
